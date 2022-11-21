@@ -1,0 +1,10 @@
+
+rootProject.name = "UserApp"
+include ':app'
+setBinding(new Binding([gradle: this]))                                // new
+evaluate(new File(                                                     // new
+        settingsDir.parentFile,                                              // new
+        'UserApp/user_flutter/.android/include_flutter.groovy'                         // new
+))
+include('user_flutter')
+
