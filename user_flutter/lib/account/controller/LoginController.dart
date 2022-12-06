@@ -14,11 +14,11 @@ class LoginController extends HttpController{
 
   static LoginController get to => Get.find();
 
-   LoginData? loginData;
+   LoginData? _loginData;
 
-  // get loginData=>_loginData;
+  LoginData? get loginData=>_loginData;
 
-  getLoginData(String customerAccount,String customerPwd,String businessLicense) async {
+     getLoginData(String customerAccount,String customerPwd,String businessLicense) async {
 
     await  postData<LoginData>(ApiConfig.HTTP_LOGIN, {
       "customerAccount": customerAccount,
@@ -26,12 +26,13 @@ class LoginController extends HttpController{
       "businessLicense": businessLicense,
     }, (data){
       if (data != null) {
-        loginData=data;
+        _loginData=data;
         update();
+        return data;
       } else {
 
       }
     });
-    return;
+    return null;
   }
 }
