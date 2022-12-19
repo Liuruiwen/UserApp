@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'account/controller/LoginController.dart';
 import 'account/ui/LoginWidget.dart';
+import 'main/MainWidget.dart';
 
 
 void main() async {
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child:  LoginWidget(),
+      child:  MainWidget(),
     );
   }
 }

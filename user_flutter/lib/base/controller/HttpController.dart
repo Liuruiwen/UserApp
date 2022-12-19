@@ -16,6 +16,15 @@ class HttpController extends BaseController{
     },isToast);
   }
 
+  getHeaderData<T>(String url, Map<String, dynamic> header, callBack(t),[bool isToast=false]) async {
+    return await HttpHelp.getInstance()?.getHeader<T>(url,header, null, (t) {
+      callBack(t);
+    }, (e) {
+      callBack(null);
+    },isToast);
+  }
+
+
   postData<T>(String url, Map<String, dynamic> params, callBack(t),[bool isToast=false]) async {
     return await HttpHelp.getInstance()?.post<T>(url, params, (t) {
       callBack(t);
@@ -23,4 +32,15 @@ class HttpController extends BaseController{
       callBack(null);
     },isToast);
   }
+
+  postHeaderData<T>(String url,Map<String, dynamic> header, Map<String, dynamic>? params, callBack(t),[bool isToast=false]) async {
+    return await HttpHelp.getInstance()?.postHeader<T>(url,header, params, (t) {
+      callBack(t);
+    }, (e) {
+      callBack(null);
+    },isToast);
+  }
+
+
 }
+

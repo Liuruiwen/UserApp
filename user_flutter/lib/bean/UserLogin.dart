@@ -1,4 +1,4 @@
-import 'Data.dart';
+import 'LoginData.dart';
 
 class UserLogin {
   UserLogin({

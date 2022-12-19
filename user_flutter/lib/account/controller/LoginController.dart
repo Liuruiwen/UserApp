@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:user_flutter/base/controller/HttpController.dart';
-import 'package:user_flutter/bean/Data.dart';
+import 'package:user_flutter/bean/LoginData.dart';
 
 import '../../ApiConfig.dart';
 

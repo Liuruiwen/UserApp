@@ -5,7 +5,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:user_flutter/account/controller/LoginController.dart';
 import 'package:user_flutter/base/widget/BaseFulWidget.dart';
 import 'package:user_flutter/base/widget/BaseWidget.dart';
-import 'package:user_flutter/bean/Data.dart';
+import 'package:user_flutter/bean/LoginData.dart';
 
 import '../../base/common/widget/ItemTextField.dart';
 import '../../base/common/widget/LoadingButton.dart';

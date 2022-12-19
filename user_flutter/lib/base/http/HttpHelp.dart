@@ -31,6 +31,7 @@ class HttpHelp {
     dio.options.headers = {
       "version":'2.0.9',
       "Authorization":'_token',
+      "Accept":"application/json"
     };
     dio.options.baseUrl = Common.BASE_URL;
     dio.options.connectTimeout = 5000;
@@ -42,18 +43,32 @@ class HttpHelp {
 
   //get请求
   get<T>(String url,Map<String, dynamic>? queryParameters ,Function successCallBack,Function errorCallBack,[bool? isToast]) async {
-   return await _requestHttp<T>(url, successCallBack,queryParameters, 'get', null, errorCallBack,isToast??false);
+   return await _requestHttp<T>(url,null, successCallBack,queryParameters, 'get', null, errorCallBack,isToast??false);
+  }
+
+  //get请求
+  getHeader<T>(String url,Map<String, dynamic>? header,Map<String, dynamic>? queryParameters ,Function successCallBack,Function errorCallBack,[bool? isToast]) async {
+    return await _requestHttp<T>(url,header, successCallBack,queryParameters, 'get', null, errorCallBack,isToast??false);
   }
 
   //post请求
   post<T>(String url, params,Function successCallBack,Function errorCallBack,[bool? isToast]) async {
-    return await  _requestHttp<T>(url, successCallBack, null,"post", params, errorCallBack,isToast??false);
+    return await  _requestHttp<T>(url,null, successCallBack, null,"post", params, errorCallBack,isToast??false);
   }
 
-  Future<bool?> _requestHttp<T>(String url, Function successCallBack,Map<String, dynamic>? queryData,
+  //post请求
+  postHeader<T>(String url, Map<String, dynamic>? header,params,Function successCallBack,Function errorCallBack,[bool? isToast]) async {
+  return await  _requestHttp<T>(url,header, successCallBack, null,"post", params, errorCallBack,isToast??false);
+  }
+
+  Future<bool?> _requestHttp<T>(String url,Map<String, dynamic>? header, Function successCallBack,Map<String, dynamic>? queryData,
       [String? method, Map<String, dynamic>?  params, Function? errorCallBack,bool? isToast]) async {
     Response? response;
     try {
+      if(header!=null){
+        ///显示指定Map的限定类型 动态添加headers
+        dio.options.headers.addAll(new Map<String,String>.from(header));
+      }
       switch (method) {
         case 'get':
           if(queryData!=null && queryData.isNotEmpty){
