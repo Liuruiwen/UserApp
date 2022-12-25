@@ -138,7 +138,7 @@ class ListNorms {
 
 class ListAttribute {
   ListAttribute(this.id, this.normsAttributeName, this.normsId,
-      this.attributeTime, this.businessLicense);
+      this.attributeTime, this.businessLicense,this.isSelect);
 
   ListAttribute.fromJson(dynamic json) {
     id = json['id'];
@@ -152,6 +152,7 @@ class ListAttribute {
   num? normsId;
   num? attributeTime;
   dynamic? businessLicense;
+  num isSelect=0;
 
 
 

@@ -43,7 +43,7 @@ class MenuPageController extends HttpController{
   /**
    * 获取商品数据
    */
-  getShoppingData(String customerAccount,String customerPwd,String businessLicense) async {
+  getShoppingData(String businessLicense) async {
 
     await  postData<List<MenuGoodsBean>>(ApiConfig.HTTP_MENU_GOODS, {
       "businessLicense": businessLicense
