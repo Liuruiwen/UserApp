@@ -18,43 +18,85 @@ class NormsDialog extends Dialog{
 
   List<ListNorms>? _list;
   String? _goodsName;
+  String? _price;
   var map=Map();
-  String? _normsList;
+  String? _normsList="已选规格：";
 
-  NormsDialog(this._list, this._goodsName);
+  NormsDialog(this._list, this._goodsName,this._price);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Material(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15))
+      ),
       //创建透明层
          type: MaterialType.transparency,//透明层类型
-         child: Container(
-           margin: EdgeInsets.fromLTRB(30,80,30,80),
-           color: Colors.white,
-           padding: EdgeInsets.all(8),
-           // decoration:BoxDecoration(
-           //  //背景
-           //   color: Colors.white,
-           //   //设置四周圆角 角度
-           //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
-           //   //设置四周边框
-           //   border: new Border.all(width: 1, color: Colours.white_19),
-           // ),
-           child: StatefulBuilder(builder: (context,_state){
-             return Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Text("${_goodsName}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(16)),),
-                 Expanded(child: _getListNorms(_state),),
-                 Container(
-                   color: Colours.blue_bg,
-                   child: Text(_normsList??"",style: TextStyle(color: Colours.text_dark,fontSize: ScreenUtil().setSp(14)),),
-                 )
+         child: Wrap(
+           children: [
+             Container(
+               height: ScreenUtil().screenHeight/2,
+               margin: EdgeInsets.fromLTRB(30,80,30,80),
+               color: Colors.white,
+               child: StatefulBuilder(builder: (context,_state){
+                 return Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   mainAxisSize: MainAxisSize.min,
+                   children: [
+                     Container(
+                       padding: EdgeInsets.all(8),
+                       child: Text("${_goodsName}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(16)),),),
+                     Expanded(child:Container(
+                       padding: EdgeInsets.all(8),
+                       child:  _getListNorms(_state),),
+                     ),
+                     Container(
+                       padding: EdgeInsets.all(8),
+                       width: ScreenUtil().screenWidth,
+                       color: Colours.grey_bg_f2,
+                       child: Text(_normsList??"",style: TextStyle(color: Colours.text_dark,fontSize: ScreenUtil().setSp(14)),),
+                     ),
+                     Container(
+                       padding:EdgeInsets.all(8) ,
+                       margin:EdgeInsets.fromLTRB(0, 0, 0, 16),
+                       child:Row(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                         children: [
+                           Text("总计",style: TextStyle(color: Colours.text_dark,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(14)),),
+                           Text("￥",style: TextStyle(color:Colours.text_red_EF5350,fontSize: ScreenUtil().setSp(14))),
+                           Text("${_price??""}",style: TextStyle(color:Colours.text_red_EF5350,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(24))),
+                           Expanded(child: Align(
+                             alignment: Alignment.topRight,
+                             child: GestureDetector(child: Container(
+                               margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
+                               padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+                               decoration: BoxDecoration(
+                                 color: Colours.blue_bg,
+                                 //设置四周圆角 角度
+                                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                 //设置四周边框
+                                 border: new Border.all(width: 1, color: Colours.blue_bg),
+                               ),
+                               child: Text("加入购物车",style: TextStyle(
+                                   color: Colors.white,fontSize: ScreenUtil().setSp(14)),
+                               ),
 
-               ],
-             );
-           },),
+                             ),
+                             onTap: (){
+
+                             },
+                             ),
+                           ))
+                         ],
+                       ) ,
+                     )
+
+                   ],
+                 );
+               },),
+             )
+           ],
          ),
     );
   }
@@ -114,10 +156,10 @@ class NormsDialog extends Dialog{
                      //设置四周圆角 角度
                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                      //设置四周边框
-                     border: new Border.all(width: 1, color: list[position].isSelect==1?Colours.blue_bg:Colours.gray_F5),
+                     border: new Border.all(width: 1, color: list[position].isSelect==1?Colours.blue_bg:Colours.grey_bg_f2),
                    ),
                    child: Text(list[position].normsAttributeName??"",style: TextStyle(
-                       color: list[position].isSelect==1?Colors.blue:Colors.black,fontSize: ScreenUtil().setSp(14)),
+                       color: list[position].isSelect==1?Colors.blue:Colours.text_normal,fontSize: ScreenUtil().setSp(14)),
                    ),
 
                  ),
@@ -136,34 +178,23 @@ class NormsDialog extends Dialog{
         child: Chip(
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           key: ValueKey<String>(_model.normsAttributeName ?? ""),
-          backgroundColor:Colors.white,
-          label: Container(
-            margin: EdgeInsets.fromLTRB(2, 5, 2, 0),
-            padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
-           decoration: BoxDecoration(
-             //背景
-            color: Colors.white,
-            //设置四周圆角 角度
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            //设置四周边框
-            border: new Border.all(width: 1, color: _model.isSelect==1?Colours.blue_bg:Colours.gray_F5),
-          ),
-            child: Text(
-              _model.normsAttributeName ?? "",
-              style: new TextStyle(
-                  fontSize: ScreenUtil().setSp(14),
-                  color: _model.isSelect == 1 ? Colors.blue : Colors.black),
-            ),
+          backgroundColor: _model.isSelect == 1 ? Colors.blue : Colors.grey[200],
+          label:  Text(
+            _model.normsAttributeName ?? "",
+            style: new TextStyle(
+                fontSize: ScreenUtil().setSp(14),
+                color: _model.isSelect == 1 ? Colors.white : Colours.gray_66),
           ),
         ),
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          map[_list?[i].id]=list[i];
+          map[_list?[i].id]=_model;
           _state((){
             list.forEach((element) {
               if(_model.id==element.id){
                 if(element.isSelect==1){
                   element.isSelect=0;
+                  map.remove(_list?[i].id);
                 }else{
                   element.isSelect=1;
                 }
@@ -172,13 +203,16 @@ class NormsDialog extends Dialog{
                 element.isSelect=0;
               }
             });
-            map[_list?[i].id]=_model;
+
             var listAttribute=<String>[];
             map.forEach((key, value) {
-              listAttribute.add("${map[key].normsAttributeName}、");
+              listAttribute.add("${map[key].normsAttributeName}");
             });
-            String data=listAttribute.toString();
-            _normsList=data.substring(0,data.length-1);
+            String data="";
+            listAttribute.forEach((element) {
+                         data==""? data=element:data="${data}、${element}";
+            });
+            _normsList="已选规格：${data}";
             print(_normsList??"");
 
           });

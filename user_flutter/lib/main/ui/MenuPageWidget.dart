@@ -177,11 +177,11 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
                                       style: TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(12))),
                                 ),
                                 onTap: (){
-                                  print("=====${MenuPageController.to.goodsList?[position].listNorms?[0].normsName}");
+                                  var item=MenuPageController.to.goodsList?[position];
                                    showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                    return NormsDialog(MenuPageController.to.goodsList?[position].listNorms,MenuPageController.to.goodsList?[position].goodsName);
+                                    return NormsDialog(item?.listNorms,item?.goodsName,item?.goodsPrice);
                                   });
                                 },
                               ),
