@@ -8,7 +8,7 @@ import 'package:user_flutter/base/widget/BaseStateWidget.dart';
 import '../../base/widget/BaseFulWidget.dart';
 import '../bean/MenuCategoryBean.dart';
 import '../controller/MenuPageController.dart';
-import '../dialog/NormsDialog.dart';
+import '../dialog/NormsDialogWidget.dart';
 
 /**
  * Created by Amuser
@@ -66,18 +66,6 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
                 height: ScreenUtil().screenHeight,
               ),
               Expanded(child:_getRightGoods())
-
-              // Expanded(
-              //     child: Container(
-              //       color: Colors.red,
-              //       child: Row(
-              //         children: [
-              //           _getLeftMenu(),
-              //           // Text("I am Jack "),
-              //         ],
-              //       ),
-              //     )
-              // ),
             ],
         ),
       ),
@@ -140,59 +128,68 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
                  mainAxisAlignment: MainAxisAlignment.start,
                  children: [
                    _imageWrapper(MenuPageController.to.goodsList?[position].goodsImage??""),
-                   Expanded(child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Text(MenuPageController.to.goodsList?[position].goodsName??"",
-                         style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(16)),
-                         textAlign:TextAlign.start,
-                       ),
-                       Container(
-                         child: Text(MenuPageController.to.goodsList?[position].goodsDesc??"",
-                           style: TextStyle(color: Colors.grey[600],fontSize: ScreenUtil().setSp(12)),
-                           textAlign:TextAlign.left ,),
-                         margin: EdgeInsets.fromLTRB(0, ScreenUtil().setHeight(6), 0, 0),
-                       ),
-                       Container(
-                         child:  Row(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                             Text("￥${MenuPageController.to.goodsList?[position].goodsPrice??""}",
-                               style: TextStyle(color: Colors.red[400],fontSize: ScreenUtil().setSp(16)),
-                               textAlign:TextAlign.left ,),
-                            Expanded(child:  Align(
-                              child:GestureDetector(
-                                child:  Container(
-                                  margin: EdgeInsets.fromLTRB(0,0, ScreenUtil().setWidth(16), 0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    gradient: const LinearGradient(colors: [
-                                      Color(0xffde53fc),
-                                      Color(0xff846dfc),
-                                      Color(0xff30c1fd),
-                                    ]),
-                                  ),
-                                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                  child: Text("选规格",
-                                      style: TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(12))),
-                                ),
-                                onTap: (){
-                                  var item=MenuPageController.to.goodsList?[position];
-                                   showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                    return NormsDialog(item?.listNorms,item?.goodsName,item?.goodsPrice);
-                                  });
-                                },
-                              ),
-                              alignment: Alignment.topRight,
-                            ))
-                           ],
+                   Expanded(child: Container(
+                     margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                     child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                         Text(MenuPageController.to.goodsList?[position].goodsName??"",
+                           style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(16)),
+                           textAlign:TextAlign.start,
                          ),
-                         margin: EdgeInsets.fromLTRB(0, ScreenUtil().setHeight(12), 0, 0),
-                       ),
+                         Container(
+                           child: Text(MenuPageController.to.goodsList?[position].goodsDesc??"",
+                             style: TextStyle(color: Colors.grey[600],fontSize: ScreenUtil().setSp(12)),
+                             textAlign:TextAlign.left ,),
+                           margin: EdgeInsets.fromLTRB(0, ScreenUtil().setHeight(6), 0, 0),
+                         ),
+                         Container(
+                           child:  Row(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             children: [
+                               Text("￥",
+                                 style: TextStyle(color: Colors.red[400],fontSize: ScreenUtil().setSp(12)),
+                                 textAlign:TextAlign.left ,),
+                               Text("${MenuPageController.to.goodsList?[position].goodsPrice??""}",
+                                 style: TextStyle(color: Colors.red[400],fontSize: ScreenUtil().setSp(16)),
+                                 textAlign:TextAlign.left ,),
+                               Expanded(child:  Align(
+                                 child:GestureDetector(
+                                   child:  Container(
+                                     margin: EdgeInsets.fromLTRB(0,0, ScreenUtil().setWidth(16), 0),
+                                     decoration: BoxDecoration(
+                                       borderRadius: BorderRadius.circular(15),
+                                       gradient: const LinearGradient(colors: [
+                                         Color(0xffde53fc),
+                                         Color(0xff846dfc),
+                                         Color(0xff30c1fd),
+                                       ]),
+                                     ),
+                                     padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                     child: Text("选规格",
+                                         style: TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(12))),
+                                   ),
+                                   onTap: (){
+                                     var item=MenuPageController.to.goodsList?[position];
+                                     showDialog(context: context, builder: (context){
+                                       return Dialog(
+                                         shape: RoundedRectangleBorder(
+                                             borderRadius: BorderRadius.all(Radius.circular(15))
+                                         ),
+                                         child: NormsDialogWidget(item?.listNorms,item?.goodsName,item?.goodsPrice),);
+                                     });
 
-                     ],
+                                   },
+                                 ),
+                                 alignment: Alignment.topRight,
+                               ))
+                             ],
+                           ),
+                           margin: EdgeInsets.fromLTRB(0, ScreenUtil().setHeight(12), 0, 0),
+                         ),
+
+                       ],
+                     ),
                    ))
                  ],
                ),
@@ -214,5 +211,9 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
       ),
     );
   }
+
+
+
+
 
 }
