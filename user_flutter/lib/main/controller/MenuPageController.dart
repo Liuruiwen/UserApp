@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:user_flutter/base/controller/HttpController.dart';
 
 import '../../ApiConfig.dart';
+import '../bean/GoodsOrderBean.dart';
 import '../bean/MenuCategoryBean.dart';
 import '../bean/MenuGoodsBean.dart';
 
@@ -17,21 +18,35 @@ class MenuPageController extends HttpController{
 
   List<MenuCategoryData>? get categoryList=>_categoryList;
 
-  List<MenuGoodsBean>? _goodsList;
+  var _goodsList=<MenuGoodsBean>[];
 
   List<MenuGoodsBean>? get goodsList=>_goodsList;
 
-  /**
-   * 获取商品品类
-   */
-  getCategoryData(String businessLicense) async {
 
-    await  postHeaderData<List<MenuCategoryData>>(ApiConfig.HTTP_MENU_CATEGORY, {
+  var _goodsOrderList=<GoodsOrderBean>[];
+
+  List<GoodsOrderBean>? get goodsOrderList=>_goodsOrderList;
+
+  String? _countPrice="0.0";
+
+  String? get countPrice=>_countPrice;
+
+
+  /**
+   * 获取商品数据
+   */
+  getGoodsData(String businessLicense) async {
+
+    await  postData<List<MenuCategoryData>>(ApiConfig.HTTP_MENU_GOODS, {
       "businessLicense": businessLicense
-    },null, (data){
+    }, (data){
       if (data != null) {
         _categoryList=data;
-        print("是否进来？？？？${_categoryList?[0].categoryName}");
+        _categoryList?.forEach((element) {
+           if( element.goodsList!=null){
+             _goodsList..addAll(element.goodsList!);
+           }
+        });
         update();
         return data;
       } else {
@@ -40,22 +55,17 @@ class MenuPageController extends HttpController{
     });
     return null;
   }
-  /**
-   * 获取商品数据
-   */
-  getShoppingData(String businessLicense) async {
 
-    await  postData<List<MenuGoodsBean>>(ApiConfig.HTTP_MENU_GOODS, {
-      "businessLicense": businessLicense
-    }, (data){
-      if (data != null) {
-        _goodsList=data;
-        update();
-        return data;
-      } else {
+  addGoodsOrderBean(GoodsOrderBean? bean){
+    if(bean!=null){
+      _goodsOrderList.add(bean);
+      double count=0.0;
+      _goodsList.forEach((element) {
+         count=count+double.parse(element.goodsPrice??"0");
+      });
+      _countPrice=count.toString();
+      update();
+    }
 
-      }
-    });
-    return null;
   }
 }

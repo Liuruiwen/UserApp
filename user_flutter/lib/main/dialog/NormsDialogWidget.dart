@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../base/dialog/ToastUntil.dart';
 import '../../res/Colours.dart';
+import '../bean/GoodsOrderBean.dart';
 import '../bean/MenuGoodsBean.dart';
 
 /**
@@ -10,19 +12,19 @@ import '../bean/MenuGoodsBean.dart';
  * Desc:
  */
 abstract class OnNormsDialogClickListener {
-  void onAttributeSelect(List<ListAttribute>? list,int position);
+  void onAddCar(GoodsOrderBean? bean);
 
 }
 
 class NormsDialogWidget extends StatelessWidget{
 
   List<ListNorms>? _list;
-  String? _goodsName;
-  String? _price;
+  MenuGoodsBean? _menuGoodsBean;
   var normsMap=Map();
   String? _normsList="亲，还没选择规格！";
+  OnNormsDialogClickListener? _listener;
 
-  NormsDialogWidget(this._list, this._goodsName,this._price);
+  NormsDialogWidget(this._menuGoodsBean,this._list,this._listener);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class NormsDialogWidget extends StatelessWidget{
           children: [
             Container(
               padding: EdgeInsets.all(8),
-              child: Text("${_goodsName}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(16)),),),
+              child: Text("${_menuGoodsBean?.goodsName??""}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(16)),),),
             Expanded(child:Container(
               padding: EdgeInsets.all(8),
               child:  _getListNorms(_state),),
@@ -59,7 +61,7 @@ class NormsDialogWidget extends StatelessWidget{
                 children: [
                   Text("总计",style: TextStyle(color: Colours.text_dark,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(14)),),
                   Text("￥",style: TextStyle(color:Colours.text_red_EF5350,fontSize: ScreenUtil().setSp(14))),
-                  Text("${_price??""}",style: TextStyle(color:Colours.text_red_EF5350,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(24))),
+                  Text("${_menuGoodsBean?.goodsPrice??""}",style: TextStyle(color:Colours.text_red_EF5350,fontWeight: FontWeight.bold,fontSize: ScreenUtil().setSp(24))),
                   Expanded(child: Align(
                     alignment: Alignment.topRight,
                     child: GestureDetector(child: Container(
@@ -78,6 +80,23 @@ class NormsDialogWidget extends StatelessWidget{
 
                     ),
                       onTap: (){
+                        var selectNorms= <ListAttribute>[];
+                        if(normsMap.length>0){
+                          String normsString="";
+                          normsMap.forEach((key, value) {
+                            selectNorms.add(value);
+                            normsString=normsString==""?"${normsMap[key].normsAttributeName}":"${normsString}、${normsMap[key].normsAttributeName}";
+                          });
+                          var id=_menuGoodsBean?.id??0;
+                          _listener?.onAddCar(GoodsOrderBean(id,_menuGoodsBean?.goodsName!,
+                              _menuGoodsBean?.goodsImage!,_menuGoodsBean?.categoryId!,
+                              normsString,_menuGoodsBean?.goodsPrice,selectNorms));
+                          Navigator.pop(context);
+                        }else{
+                          ToastUntil.showToast("亲，请选择规格！");
+                        }
+
+
 
                       },
                     ),

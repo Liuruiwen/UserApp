@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:user_flutter/base/widget/BaseStateWidget.dart';
+import 'package:user_flutter/main/bean/GoodsOrderBean.dart';
 
 import '../../base/widget/BaseFulWidget.dart';
 import '../bean/MenuCategoryBean.dart';
@@ -25,7 +26,7 @@ class MenuPageWidget extends BaseFulWidget{
 
 }
 
-class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
+class _MenuPageWidget extends BaseStateWidget<MenuPageWidget> implements OnNormsDialogClickListener{
   List<MenuCategoryData> _listCategory=[];
   List<String> list=["fdgdfgd","125454","2332233232","eiiiiiii","125454","2332233232","eiiiiiii","125454","2332233232","eiiiiiii","125454","2332233232","eiiiiiii"];
   int selectPosition=0;
@@ -48,8 +49,7 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
   }
 
   void _loadingData()async{
-   await MenuPageController.to.getCategoryData("GY11156336987889");
-   await MenuPageController.to.getShoppingData("GY11156336987889");
+   await MenuPageController.to.getGoodsData("GY11156336987889");
   }
 
   /**
@@ -155,7 +155,17 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
                                  textAlign:TextAlign.left ,),
                                Expanded(child:  Align(
                                  child:GestureDetector(
-                                   child:  Container(
+                                   child:MenuPageController.to.goodsList?[position].listNorms==null?
+                                   Container(
+                                     child: Text("+",style: TextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(20),fontWeight: FontWeight.bold),),
+                                     width: 8.0,
+                                     height: 8.0,
+                                     margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                                     decoration: BoxDecoration(
+                                         shape: BoxShape.circle,
+                                         color: Colors.blue,)
+                                   ):
+                                   Container(
                                      margin: EdgeInsets.fromLTRB(0,0, ScreenUtil().setWidth(16), 0),
                                      decoration: BoxDecoration(
                                        borderRadius: BorderRadius.circular(15),
@@ -171,13 +181,16 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
                                    ),
                                    onTap: (){
                                      var item=MenuPageController.to.goodsList?[position];
-                                     showDialog(context: context, builder: (context){
-                                       return Dialog(
-                                         shape: RoundedRectangleBorder(
-                                             borderRadius: BorderRadius.all(Radius.circular(15))
-                                         ),
-                                         child: NormsDialogWidget(item?.listNorms,item?.goodsName,item?.goodsPrice),);
-                                     });
+                                     if(item?.listNorms!=null){
+                                       showDialog(context: context, builder: (context){
+                                         return Dialog(
+                                           shape: RoundedRectangleBorder(
+                                               borderRadius: BorderRadius.all(Radius.circular(15))
+                                           ),
+                                           child: NormsDialogWidget(item,item?.listNorms,this),);
+                                       });
+                                     }
+
 
                                    },
                                  ),
@@ -210,6 +223,11 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>{
             Image.asset('images/drawable-xhdpi/loading_error.jpg'),
       ),
     );
+  }
+
+  @override
+  void onAddCar(GoodsOrderBean? bean) {
+    MenuPageController.to.addGoodsOrderBean(bean);
   }
 
 
