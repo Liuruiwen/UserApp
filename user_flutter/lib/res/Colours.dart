@@ -20,6 +20,7 @@ class Colours {
   static const Color text_normal = Color(0xFF666666);
   static const Color text_gray = Color(0xFF999999);
   static const Color text_red_EF5350=Color(0xFFEF5350);
+  static const Color text_E5E5E5=Color(0xFFE5E5E5);
 
   static const Color divider = Color(0xFFE5E5E5);
 

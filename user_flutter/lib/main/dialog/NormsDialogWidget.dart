@@ -90,7 +90,7 @@ class NormsDialogWidget extends StatelessWidget{
                           var id=_menuGoodsBean?.id??0;
                           _listener?.onAddCar(GoodsOrderBean(id,_menuGoodsBean?.goodsName!,
                               _menuGoodsBean?.goodsImage!,_menuGoodsBean?.categoryId!,
-                              normsString,_menuGoodsBean?.goodsPrice,selectNorms));
+                              normsString,_menuGoodsBean?.goodsPrice,1,selectNorms));
                           Navigator.pop(context);
                         }else{
                           ToastUntil.showToast("亲，请选择规格！");
@@ -117,7 +117,6 @@ class NormsDialogWidget extends StatelessWidget{
   Widget _getListNorms(StateSetter _state){
     return _list==null?Container():ListView.builder(
       //解决无线高度问题
-        physics: new NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: _list?.length,
         padding: EdgeInsets.all(0),

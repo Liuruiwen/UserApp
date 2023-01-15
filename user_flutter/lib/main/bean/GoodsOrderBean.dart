@@ -14,9 +14,10 @@ class GoodsOrderBean{
   num? categoryId;
   String? normsString;
   String? goodsPrice;
+  int? goodsNum;
   List<ListAttribute>? list;
 
   GoodsOrderBean(this.goodId, this.goodsName, this.goodsImage, this.categoryId,this.normsString,
-      this.goodsPrice, this.list);
+      this.goodsPrice,this.goodsNum, this.list);
 }
 

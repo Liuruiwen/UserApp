@@ -21,24 +21,66 @@ class MainWidget extends BaseFulWidget{
 
 }
 
-class _MainWidget extends BaseStateWidget<MainWidget>{
+class _MainWidget extends BaseStateWidget<MainWidget> {
   int _currentIndex=0;
   var page_title=<String>["菜单","购物车","我的"];
-  List<Widget> page_children=[MenuPageWidget(),CarPageWidget(),MinePageWidget()];
+  List<Widget> page_children=[MenuPageWidget(),MinePageWidget(),CarPageWidget()];
+  PageController? _controller;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(initialPage: _currentIndex);
+  }
+
 
   @override
   Widget getBuildWidget(BuildContext buildContext) {
     // TODO: implement getBuildWidget
+    return  _getBody();
+    // return Scaffold(
+    //   body: page_children[_currentIndex],
+    //   bottomNavigationBar: new BottomAppBar(
+    //     shape: CircularNotchedRectangle(), ///中间悬浮按钮嵌入BottomAppBar
+    //     notchMargin: 8,///缺口边距
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //       children: [
+    //         buildBottomBarItem(_currentIndex, 0, Icons.home, '首页'),
+    //         buildBottomBarItem(_currentIndex, -1, Icons.person, ''),
+    //         buildBottomBarItem(_currentIndex, 1, Icons.person, '我的'),
+    //
+    //       ],
+    //     ),
+    //   ),
+    //   floatingActionButton: FloatingActionButton(
+    //     foregroundColor: Colors.white,
+    //     elevation: 10.0,///阴影
+    //     onPressed: (){
+    //       setState(() {
+    //         _currentIndex = 2;
+    //       });
+    //     },
+    //     child: new Icon(Icons.car_repair),
+    //   ),
+    //   floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,//放在中间
+    // );
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+
+Widget _getBody(){
     return Scaffold(
-      appBar: AppBar(
-        title: Text(page_title[_currentIndex]),
-
-        ///导航栏标题
-        centerTitle: true,
-
-        ///导航栏标题居中显示（IOS默认居中，Android默认靠左）
+      body:IndexedStack(
+        index: _currentIndex,
+        children: page_children,
       ),
-      body: page_children[_currentIndex],
       bottomNavigationBar: new BottomAppBar(
         shape: CircularNotchedRectangle(), ///中间悬浮按钮嵌入BottomAppBar
         notchMargin: 8,///缺口边距
@@ -47,7 +89,7 @@ class _MainWidget extends BaseStateWidget<MainWidget>{
           children: [
             buildBottomBarItem(_currentIndex, 0, Icons.home, '首页'),
             buildBottomBarItem(_currentIndex, -1, Icons.person, ''),
-            buildBottomBarItem(_currentIndex, 1, Icons.image, '我的'),
+            buildBottomBarItem(_currentIndex, 1, Icons.person, '我的'),
 
           ],
         ),
@@ -60,11 +102,59 @@ class _MainWidget extends BaseStateWidget<MainWidget>{
             _currentIndex = 2;
           });
         },
-        child: new Icon(Icons.add),
+        child: new Icon(Icons.car_repair),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,//放在中间
     );
+
+
+}
+
+
+  Widget _getPageView(){
+    return new PageView(
+      physics: NeverScrollableScrollPhysics(),//viewPage禁止左右滑动
+      onPageChanged: _pageChange,
+      controller: _controller,
+      children: <Widget>[
+        Offstage(
+          offstage: _currentIndex != 0,
+          child:  TickerMode(
+            enabled: _currentIndex == 0,
+            child:  MaterialApp(
+              home: MenuPageWidget(),
+            ),
+          ),
+        ),
+        Offstage(
+          offstage: _currentIndex != 1,
+          child:  TickerMode(
+            enabled: _currentIndex == 1,
+            child:  MaterialApp(
+              home: CarPageWidget(),
+            ),
+          ),
+        ),
+        Offstage(
+          offstage: _currentIndex != 2,
+          child:  TickerMode(
+            enabled: _currentIndex ==2,
+            child:  MaterialApp(
+              home:  MinePageWidget(),
+            ),
+          ),
+        )
+      ],);
   }
+
+  void _pageChange(int index) {
+    if (index != _currentIndex) {
+        _currentIndex = index;
+        print("现在是坎坎坷坷====${_currentIndex}");
+      };
+    }
+
+
 
   buildBottomBarItem(
       int selectedIndex, int index, IconData iconData, String title) {
@@ -111,8 +201,10 @@ class _MainWidget extends BaseStateWidget<MainWidget>{
         child: new GestureDetector(
           onTap: () {
             if(index != _currentIndex) {
+              // _controller?.jumpToPage(index);
               setState(() {
                 _currentIndex = index;
+                print("ddddddd==${index}");
               });
             }
           },
