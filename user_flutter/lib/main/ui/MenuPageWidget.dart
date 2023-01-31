@@ -4,9 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/instance_manager.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:user_flutter/base/widget/BaseStateWidget.dart';
 import 'package:user_flutter/main/bean/GoodsOrderBean.dart';
 import 'package:user_flutter/main/ui/MinePageWidget.dart';
@@ -50,7 +52,9 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
     "eiiiiiii"
   ];
   int selectPosition = 0;
-  ScrollController? _controller;
+  int lastPosition=0;
+  var _controller = AutoScrollController();
+  bool isMenuClick=false;
 
   @override
   Widget getBuildWidget(BuildContext buildContext) {
@@ -64,12 +68,12 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadingData());
-    _controller = ScrollController();
+
   }
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -158,28 +162,32 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
                   ),
                 ),
                 onTap: () {
-                  print("进来没啊========我点击了啊");
-                  selectPosition = position;
-                  _streamController.add(selectPosition);
+                  isMenuClick=true;
+                  // selectPosition = position;
+                  _streamController.add(position);
 
 
                   /**
-                   * listview 滚动到指定的itemhttps://www.jianshu.com/p/72754a08b423
+                   * listview 滚动到指定的item  https://www.jianshu.com/p/72754a08b423
                    */
-                  // var list= MenuPageController.to.goodsList;
-                  // if(list!=null){
-                  //   for(var i = 0;i < list.length;i++){
-                  //     var element=list[i];
-                  //     if(element.categoryId==MenuPageController.to.categoryList?[selectPosition].id){
-                  //       _controller?.animateTo(
-                  //         1,
-                  //         curve: Curves.ease,
-                  //         duration: Duration(milliseconds: 400),
-                  //       );
-                  //     }
-                  //
-                  //   }
-                  // }
+                  var list= MenuPageController.to.goodsList;
+                  if(list!=null){
+                    for(var i = 0;i < list.length;i++){
+                      var element=list[i];
+                      if(element.categoryId==MenuPageController.to.categoryList?[position].id){
+                        // _controller.scrollToIndex(i+10);
+                        int positions=0;
+                        if(i>0){
+                          positions=i-1;
+                        }
+                        double itemHeight=MediaQuery.of(context).size.height/lastPosition;
+                        _controller.jumpTo(positions*itemHeight);
+                        print("=${ScreenUtil().screenHeight}===${itemHeight}过分啊${list.length}。。==${element.goodsName}===${element.categoryId}。========我点击了啊${i}");
+                         break;
+                      }
+
+                    }
+                  }
                 },
               );
             },
@@ -199,16 +207,31 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
               childrenDelegate:
                   CustomScrollDelegate((BuildContext context, int index) {
                 //ListView的子条目
-                return _goodsItem(context, index);
+                    return AutoScrollTag(
+                      key: ValueKey(index),
+                      controller: _controller,
+                      index: index,
+                      child: _goodsItem(context, index),
+                  );
+
+                // return _goodsItem(context, index);
               },
               itemCount: MenuPageController.to.goodsList?.length ?? 0,
                     scrollCallBack: (int firstIndex, int lastIndex) {
 
                          var item= MenuPageController.to.goodsList?[firstIndex];
                      int position= MenuPageController.to.categoryPosition?[item?.categoryId];
-                      print("当前是${position}=========现在是${selectPosition}");
+                      print("当前是${firstIndex}=========现在是${lastIndex}");
+                      if(lastPosition==0){
+                        lastPosition=lastIndex;
+                      }
+
                      if(position!=selectPosition ){
 
+                       if(isMenuClick==true){
+
+                         return;
+                       }
                        selectPosition=position;
                        _streamController.add(selectPosition);
 
@@ -221,7 +244,7 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
   }
 
   Widget _goodsItem(BuildContext context, int position) {
-    return GestureDetector(
+    return Listener(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -341,6 +364,10 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
           ))
         ],
       ),
+       onPointerDown: (event){
+         isMenuClick=false;
+       },
+
     );
   }
 
