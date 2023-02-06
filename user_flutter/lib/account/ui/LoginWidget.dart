@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user_flutter/account/controller/LoginController.dart';
 import 'package:user_flutter/base/widget/BaseFulWidget.dart';
 import 'package:user_flutter/base/widget/BaseWidget.dart';
-import 'package:user_flutter/bean/LoginData.dart';
+import 'package:user_flutter/account/bean/LoginData.dart';
 
 import '../../base/common/widget/ItemTextField.dart';
 import '../../base/common/widget/LoadingButton.dart';
+import '../../base/until/SpKey.dart';
+import '../../provider/AppProvider.dart';
 import '../../res/Dimens.dart';
 import '../../res/styles.dart';
 
@@ -127,10 +131,19 @@ class _LoginWidget extends BaseWidget {
      setState(() {
        _loginState=3;
      });
+
+     await LoginController.to.getUserInfo();
+     if(LoginController.to.userInfoBean!=null){
+       var app = context.read<AppProvider>();
+       app.setUserInfo(LoginController.to.userInfoBean);
+       saveToken(LoginController.to.loginData?.token??"");
+     }
+     closeWidget();
      showToast("登录成功${LoginController.to.loginData?.customerAccount}");
    }else{
      showToast("登录失败");
    }
+
 
 
     setState(() {
@@ -149,6 +162,11 @@ class _LoginWidget extends BaseWidget {
     //     _animateWidth=0;
     //   });
     // }
+  }
+
+  void saveToken(String token)async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(SpKey.SP_TOKEN, token);
   }
 
   _processLoginData(String? url) async {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:user_flutter/provider/AppProvider.dart';
 
 import 'account/controller/LoginController.dart';
 import 'account/ui/LoginWidget.dart';
@@ -10,7 +12,15 @@ import 'main/MainWidget.dart';
 void main() async {
   // Add this line
   await ScreenUtil.ensureScreenSize();
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      // 接受监听
+      providers: [
+        ChangeNotifierProvider.value(value: AppProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

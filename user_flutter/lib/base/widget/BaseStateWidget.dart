@@ -125,4 +125,8 @@ import 'dart:convert' as convert;
       color: Colors.blue[500],
     );
    }
+
+   bool isEmpty(String? input){
+    return input?.isNotEmpty??false;
+   }
  }

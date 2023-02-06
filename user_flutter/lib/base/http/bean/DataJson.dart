@@ -1,9 +1,10 @@
 
 
 
-import '../../../bean/LoginData.dart';
+import '../../../account/bean/LoginData.dart';
 import '../../../main/bean/MenuCategoryBean.dart';
 import '../../../main/bean/MenuGoodsBean.dart';
+import '../../../main/bean/UserInfoBean.dart';
 
 /**
  * Created by Amuser
@@ -15,6 +16,8 @@ import '../../../main/bean/MenuGoodsBean.dart';
     switch(T.toString()){
       case "LoginData":
         return LoginData.fromJson(data) as T;
+      case "UserInfoBean":
+        return UserInfoBean.fromJson(data) as T;
       case "List<MenuCategoryData>":
            List<MenuCategoryData> list=[];
            data.forEach((v){

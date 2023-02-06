@@ -1,4 +1,4 @@
-import 'LoginData.dart';
+import '../account/bean/LoginData.dart';
 
 class UserLogin {
   UserLogin({

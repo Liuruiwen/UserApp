@@ -1,6 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:user_flutter/bean/LoginData.dart';
+import 'package:user_flutter/account/bean/LoginData.dart';
 
 import '../../ApiConfig.dart';
 import '../../base/bloc/HttpBloc.dart';

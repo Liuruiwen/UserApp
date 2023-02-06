@@ -6,5 +6,6 @@
 
 class ApiConfig{
   static String HTTP_LOGIN="s1/customer/login";//登录
+  static String HTTP_USER_INFO="s1/customer/selectCustomerInfo";//查询用户信息
   static String HTTP_MENU_GOODS="s1/customer/selectCategory";//查询商品列表
 }

@@ -37,6 +37,8 @@ dependencies:
   flutter_screenutil: ^5.6.0   #适配
   cached_network_image: ^3.2.3  #加载网络图片
   scroll_to_index: ^3.0.1  #listview 滚动到指定位置
+  provider: ^6.0.5  #全局的状态管理
+  shared_preferences: ^2.0.17  #flutter 内存储
 
 dev_dependencies:
   flutter_test:

@@ -52,7 +52,7 @@ class HttpHelp {
   }
 
   //post请求
-  post<T>(String url, params,Function successCallBack,Function errorCallBack,[bool? isToast]) async {
+  post<T>(String url,Map<String, dynamic>? params,Function successCallBack,Function errorCallBack,[bool? isToast]) async {
     return await  _requestHttp<T>(url,null, successCallBack, null,"post", params, errorCallBack,isToast??false);
   }
 
@@ -65,6 +65,7 @@ class HttpHelp {
       [String? method, Map<String, dynamic>?  params, Function? errorCallBack,bool? isToast]) async {
     Response? response;
     try {
+      dio.options.headers.addAll({ "token":Common.APP_TOKEN});
       if(header!=null){
         ///显示指定Map的限定类型 动态添加headers
         dio.options.headers.addAll(new Map<String,String>.from(header));

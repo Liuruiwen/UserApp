@@ -11,8 +11,9 @@ import 'package:get/instance_manager.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:user_flutter/base/widget/BaseStateWidget.dart';
 import 'package:user_flutter/main/bean/GoodsOrderBean.dart';
-import 'package:user_flutter/main/ui/MinePageWidget.dart';
 
+
+import '../../base/until/CustomScrollDelegate.dart';
 import '../../base/widget/BaseFulWidget.dart';
 import '../bean/MenuCategoryBean.dart';
 import '../controller/MenuPageController.dart';
