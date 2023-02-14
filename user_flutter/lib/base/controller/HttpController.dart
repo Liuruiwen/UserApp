@@ -41,6 +41,14 @@ class HttpController extends BaseController{
     },isToast);
   }
 
+  postDatas<T>(String url, Map<String, dynamic> params, callBack(t),errorBack(e),[bool isToast=false]) async {
+    return await HttpHelp.getInstance()?.post<T>(url, params, (t) {
+      callBack(t);
+    }, (e) {
+      errorBack(e);
+    },isToast);
+  }
+
   postHeaderData<T>(String url,Map<String, dynamic> header, Map<String, dynamic>? params, callBack(t),[bool isToast=false]) async {
     return await HttpHelp.getInstance()?.postHeader<T>(url,header, params, (t) {
       callBack(t);

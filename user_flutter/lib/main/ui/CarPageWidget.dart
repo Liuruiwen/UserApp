@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/instance_manager.dart';
 import 'package:user_flutter/base/widget/BaseStateWidget.dart';
 
+import '../../base/Common.dart';
 import '../../base/widget/BaseFulWidget.dart';
 import '../../res/Colours.dart';
+import '../bean/CarOrderBean.dart';
 import '../bean/GoodsOrderBean.dart';
 import '../controller/MenuPageController.dart';
 
@@ -301,7 +304,31 @@ class _CarPageWidget extends BaseStateWidget<CarPageWidget> {
                   ),
                 ),
               ),
-              onTap: () {},
+              onTap: () async{
+                DateTime today = new DateTime.now();
+                String orderTime ="${today.year.toString()}-${today.month.toString().padLeft(2,'0')}-${today.day.toString().padLeft(2,'0')}";
+                // CarOrderBean
+                final carController = Get.put(MenuPageController());
+               if( carController.goodsOrderList?.isNotEmpty==true){
+                 var list=<CarOrderBean>[];
+                 carController.goodsOrderList?.forEach((v){
+
+                      var normList=<OrderAttributeBean>[];
+                          v.list?.forEach((element) {
+                               normList.add(OrderAttributeBean(element.normsId?.toInt(),element.id?.toInt()));
+                          });
+                      list.add(CarOrderBean(v.goodId?.toInt(), v.categoryId?.toInt(), v.goodsNum, normList));
+                 });
+                 String dataList = json.encode(list);
+                 print("当前时间：$dataList");
+              await   MenuPageController.to.userPlaceOrder(orderTime, MenuPageController.to.orderNum,MenuPageController.to.countPrice.toString(),Common.SHOP_TOKEN,dataList);
+
+                if(MenuPageController.to.orderState){
+                  showToast("下单成功！");
+                }
+               }
+
+              },
             ),
           ))
         ],

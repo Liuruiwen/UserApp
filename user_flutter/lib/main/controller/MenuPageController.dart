@@ -27,6 +27,10 @@ class MenuPageController extends HttpController{
 
   List<GoodsOrderBean>? get goodsOrderList=>_goodsOrderList;
 
+  var _orderState=false;//用户下单是否成功
+
+  bool get orderState=>_orderState;
+
 
   int _categorySelectPosition=0;
 
@@ -39,6 +43,10 @@ class MenuPageController extends HttpController{
   String? _countPrice="0.0";
 
   String? get countPrice=>_countPrice;
+
+  int _orderNum=0;
+
+  int get orderNum=>_orderNum;
 
 
   /**
@@ -71,6 +79,31 @@ class MenuPageController extends HttpController{
 
 
   /**
+   * 用户下单
+   */
+  userPlaceOrder(String orderTime,int  goodsNum,String goodsPrice,String businessLicense,String goodGroup) async {
+
+    await  postDatas<List<MenuCategoryData>>(ApiConfig.HTTP_PLACE_ORDER, {
+      "orderTime": orderTime,
+      "goodsNum": goodsNum,
+      "goodsPrice": goodsPrice,
+      "businessLicense": businessLicense,
+      "goodGroup": goodGroup,
+    }, (data){
+      _orderState=true;
+      clearCarData();
+      update();
+      return data;
+    },(e){
+      _orderState=false;
+      update();
+    });
+    return null;
+  }
+
+
+
+  /**
    * 品类选中处理
    */
   updateGoods(int position){
@@ -84,13 +117,13 @@ class MenuPageController extends HttpController{
    */
   addGoodsOrderBean(GoodsOrderBean? bean){
     if(bean!=null){
+      double price=0.0;
+      double goodsPrice=double.parse(bean.goodsPrice??"0")*(bean.goodsNum??1);
+      var num=bean.goodsNum??1;
+      _orderNum=_orderNum+num;
+      price=price+goodsPrice;
       _goodsOrderList.add(bean);
-      double count=0.0;
-      _goodsOrderList.forEach((element) {
-        double goodsPrice=double.parse(element.goodsPrice??"0")*(element.goodsNum??1);
-         count=count+goodsPrice;
-      });
-      _countPrice=count.toString();
+      _countPrice=price.toString();
       update();
     }
 
@@ -105,6 +138,7 @@ class MenuPageController extends HttpController{
       goodsOrderList?[position].goodsNum=goodsNum + count;
       double price=double.parse(_countPrice??"0.0")+double.parse(goodsOrderList?[position].goodsPrice??"0");
       _countPrice=price.toString();
+      _orderNum=_orderNum+1;
       update();
     }else{
       print("他们就是空啊===");
@@ -125,12 +159,22 @@ class MenuPageController extends HttpController{
       goodsOrderList?[position].goodsNum=goodsNum - count;
       double price=double.parse(_countPrice??"0.0")-double.parse(goodsOrderList?[position].goodsPrice??"0");
       _countPrice=price.toString();
+      _orderNum=_orderNum-1;
       update();
     }else{
       print("他们就是空啊===");
     }
 
     update();
+  }
+
+  /**
+   * 清空购物车数据
+   */
+  clearCarData(){
+      _goodsOrderList.clear();
+      _countPrice="0.0";
+      _orderNum=0;
   }
 
 

@@ -8,4 +8,5 @@
   static const BASE_URL = "http://192.168.1.5:8080/";
   static String CONNECT_CONTEXT="com.umeng.soexample";
   static String APP_TOKEN="";
+  static String SHOP_TOKEN="";
  }

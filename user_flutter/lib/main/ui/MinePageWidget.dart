@@ -138,12 +138,11 @@ class _MinePageWidget extends BaseStateWidget<MinePageWidget> {
         _getItem("关于我", () {
           // pushWidget(widget._context, new AboutMeWidget());
         }),
-        bean==null? new Container() : _getItem("退出登录", () {
-          // if(bean.openid!=null){
-          //   _appBloc.getMethodChannel().invokeListMethod('login_out',bean.openid);
-          //   return;
-          // }
-          // _loginOut();
+        bean==null? new Container() : _getItem("退出登录", () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString(SpKey.SP_TOKEN, "");
+          var app = context.read<AppProvider>();
+           app.setUserInfo(null);
         }),
 
       ],

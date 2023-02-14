@@ -9,6 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:user_flutter/base/Common.dart';
 import 'package:user_flutter/base/widget/BaseStateWidget.dart';
 import 'package:user_flutter/main/bean/GoodsOrderBean.dart';
 
@@ -79,7 +80,8 @@ class _MenuPageWidget extends BaseStateWidget<MenuPageWidget>
   }
 
   void _loadingData() async {
-    await MenuPageController.to.getGoodsData("GY11156336987889");
+    Common.SHOP_TOKEN="GY11156336987889";
+    await MenuPageController.to.getGoodsData(Common.SHOP_TOKEN);
   }
 
   /**
