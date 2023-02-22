@@ -15,11 +15,13 @@ class ItemTextField extends StatefulWidget {
   final String? hintContent;
   final bool hasSuffixIcon;
   final EdgeInsetsGeometry? margin;
+  final int maxLength;
 
 
   const ItemTextField(
       { Key? key, this.controller, this.prefixIcon, this.hintContent,
         this.margin,
+        this.maxLength=16,
         this.hasSuffixIcon = false}) : super(key: key);
 
   @override
@@ -51,8 +53,8 @@ class ItemTextFiledState extends State<ItemTextField> {
         children: <Widget>[
           new Container(
             child: new Icon(widget.prefixIcon, size: 30, color: Colors.blue,),
-            width: ScreenUtil().setWidth(Dimens.dp100),
-            height: ScreenUtil().setHeight(Dimens.dp120),
+            width: ScreenUtil().setWidth(Dimens.dp50),
+            height: ScreenUtil().setHeight(Dimens.dp60),
           ),
 
           new Expanded(
@@ -71,7 +73,7 @@ class ItemTextFiledState extends State<ItemTextField> {
     return new TextField(
       controller: widget.controller,
       maxLines: 1,
-      maxLength: 16,
+      maxLength: widget.maxLength,
       autocorrect: true,
       //是否自动更正
       autofocus: true,

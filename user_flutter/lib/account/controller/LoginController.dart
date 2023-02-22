@@ -23,6 +23,9 @@ class LoginController extends HttpController {
 
   UserInfoBean? get userInfoBean => _userInfoBean;
 
+  /**
+   * 登录
+   */
   getLoginData(String customerAccount, String customerPwd,
       String businessLicense) async {
     await postData<LoginData>(ApiConfig.HTTP_LOGIN, {
@@ -31,6 +34,7 @@ class LoginController extends HttpController {
       "businessLicense": businessLicense,
     }, (data) {
       if (data != null) {
+        print("到这里来了");
         _loginData = data;
         Common.APP_TOKEN=_loginData?.token??"";
         update();
@@ -41,14 +45,49 @@ class LoginController extends HttpController {
   }
 
 
+  /**
+   * 获取用户信息
+   */
   getUserInfo() async {
     await post<UserInfoBean>(ApiConfig.HTTP_USER_INFO,(data) {
       if (data != null) {
+        print("会走这里？？？===getUserInfo");
         _userInfoBean = data;
         update();
         return data;
       } else {}
     });
     return null;
+  }
+
+
+  /**
+   * 注册
+   */
+  register(String customerAccount, String customerPwd,
+      String businessLicense) async {
+    await postData<LoginData>(ApiConfig.HTTP_REGISTER, {
+      "customerAccount": customerAccount,
+      "customerPwd": customerPwd,
+      "businessLicense": businessLicense,
+    }, (data) {
+      if (data != null) {
+        print("到这里来了注册");
+        _loginData = data;
+        Common.APP_TOKEN=_loginData?.token??"";
+        update();
+        return data;
+      } else {}
+    });
+    return null;
+  }
+
+
+  /**
+   * 清除缓存数据
+   */
+  clearData(){
+    _userInfoBean=null;
+    _loginData=null;
   }
 }

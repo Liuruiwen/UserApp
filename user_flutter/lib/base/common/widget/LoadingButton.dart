@@ -40,14 +40,14 @@ class _LoadingButton extends State<LoadingButton>
     // TODO: implement initState
     super.initState();
     _controller = AnimationController(
-        duration: Duration(milliseconds: (600).round()), vsync: this);
+        duration: Duration(milliseconds: (200).round()), vsync: this);
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller!);
     _controller?.addListener(() {
       setState(() {});
     });
     _controller?.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Timer(Duration(milliseconds: 200), () {
+        Timer(Duration(milliseconds: 10), () {
           widget._finish();
         });
       }
@@ -63,7 +63,7 @@ class _LoadingButton extends State<LoadingButton>
       child: GestureDetector(
         child: Container(
           alignment: Alignment.center,
-          height: getWidth(Dimens.dp48),
+          height: getWidth(Dimens.dp55),
           width: widget._animateWidth == 0
               ? MediaQuery.of(context).size.width
               : getWidth(widget._animateWidth),
@@ -93,8 +93,8 @@ class _LoadingButton extends State<LoadingButton>
 
   Widget _getLoading() {
     return SizedBox(
-      height: getWidth(Dimens.dp50),
-      width: getWidth(Dimens.dp50),
+      height: getWidth(Dimens.dp30),
+      width: getWidth(Dimens.dp30),
       child: CircularProgressIndicator(
         strokeWidth: 2.0,
         valueColor: AlwaysStoppedAnimation(Colors.white),
@@ -111,7 +111,10 @@ class _LoadingButton extends State<LoadingButton>
       case 3:
         _controller?.forward();
         return Container(
-            padding: EdgeInsets.only(right: getWidth(55), bottom: getWidth(18)),
+            padding: EdgeInsets.only(right: getWidth(30),bottom:  getWidth(10)),
+            alignment: Alignment.center,
+        //     child: Text("好吧",style: TextStyle(color: Colors.white),),
+        // );
             child: CustomPaint(
               painter: LoadingFinish(_animation?.value),
             ));

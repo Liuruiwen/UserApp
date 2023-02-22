@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../../account/ui/LoginWidget.dart';
 import '../../base/widget/BaseFulWidget.dart';
 import '../../base/widget/BaseStateWidget.dart';
-import '../../account/bean/LoginData.dart';
 import '../../res/Colours.dart';
 import '../../res/Dimens.dart';
 import '../bean/UserInfoBean.dart';
@@ -50,11 +49,13 @@ class _MinePageWidget extends BaseStateWidget<MinePageWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadingData());
 
   }
 
   void _loadingData ()async{
+    print("会到个人中心来？？？");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token=prefs.getString(SpKey.SP_TOKEN);
     if(isEmpty(token)){
@@ -140,7 +141,8 @@ class _MinePageWidget extends BaseStateWidget<MinePageWidget> {
         }),
         bean==null? new Container() : _getItem("退出登录", () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString(SpKey.SP_TOKEN, "");
+            await  prefs.setString(SpKey.SP_TOKEN, "");
+          Common.APP_TOKEN="";
           var app = context.read<AppProvider>();
            app.setUserInfo(null);
         }),
