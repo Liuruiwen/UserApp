@@ -5,6 +5,7 @@ import '../../../account/bean/LoginData.dart';
 import '../../../main/bean/MenuCategoryBean.dart';
 import '../../../main/bean/MenuGoodsBean.dart';
 import '../../../main/bean/UserInfoBean.dart';
+import '../../../main/bean/UserOrderBean.dart';
 
 /**
  * Created by Amuser
@@ -17,8 +18,13 @@ import '../../../main/bean/UserInfoBean.dart';
       case "LoginData":
         return LoginData.fromJson(data) as T;
       case "UserInfoBean":
+        print("过分。。。。。");
         return UserInfoBean.fromJson(data) as T;
+      case "UserOrderBean":
+
+        return UserOrderBean.fromJson(data) as T;
       case "List<MenuCategoryData>":
+        print("品类。。。。。");
            List<MenuCategoryData> list=[];
            data.forEach((v){
              list.add(MenuCategoryData.fromJson(v));
@@ -30,6 +36,7 @@ import '../../../main/bean/UserInfoBean.dart';
           list.add(MenuGoodsBean.fromJson(v));
         });
         return list as T;
+
       default:
 
         return null;

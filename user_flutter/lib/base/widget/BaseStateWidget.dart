@@ -95,7 +95,7 @@ import 'dart:convert' as convert;
           children: <Widget>[
             new Container(
               child: new Image(
-                image: new AssetImage('drawable/image/loading_error.jpg'),
+                image: new AssetImage('images/drawable-xhdpi/loading_error.jpg'),
                 width: MediaQuery
                     .of(context)
                     .size

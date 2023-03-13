@@ -10,5 +10,6 @@ class ApiConfig{
   static String HTTP_USER_INFO="s1/customer/selectCustomerInfo";//查询用户信息
   static String HTTP_MENU_GOODS="s1/customer/selectCategory";//查询商品列表
   static String HTTP_PLACE_ORDER="s1/customer/createOrder";//用户下单
+  static String HTTP_USER_ORDER_LIST="/s1/order/getUserOrderList";//订单列表
 
 }

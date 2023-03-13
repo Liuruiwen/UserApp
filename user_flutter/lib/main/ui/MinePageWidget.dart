@@ -16,6 +16,7 @@ import '../../res/Colours.dart';
 import '../../res/Dimens.dart';
 import '../bean/UserInfoBean.dart';
 import '../controller/MinePageController.dart';
+import 'UserOrderWidget.dart';
 
 
 
@@ -128,6 +129,9 @@ class _MinePageWidget extends BaseStateWidget<MinePageWidget> {
       children: <Widget>[
         getStateWidget(),
         _getHead(bean),
+        _getItem("我的订单", () {
+          pushWidget(context, new UserOrderWidget());
+        }),
         _getItem("用户详情", () {
           // bean!=null
           //     ? pushWidget(widget._context, new UserInfoPage())

@@ -13,6 +13,7 @@ class Colours {
 
   static const Color transparent_80 = Color(0x80000000); 
   static const Color white_19 = Color(0X19FFFFFF);
+  static const Color white_bg = Color(0XFFFFFFFF);
   static const Color blue_bg = Color(0xFF42A5F5);
   static const Color grey_bg_f2=Color(0xFFF2F2F2);
 
