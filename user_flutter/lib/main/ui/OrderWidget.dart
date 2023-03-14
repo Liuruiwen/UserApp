@@ -68,93 +68,125 @@ class _OrderWidget extends BaseStateWidget<OrderWidget> {
     UserOrderDataBean? item = UserOrderController.to.userInfoBean
         ?.list?[position];
     var goodsList=item?.goodsList??[];
+    List<GoodsList> showGoodsList=[];
+    if(goodsList.length>4){
+      showGoodsList=goodsList.sublist(0,4);
+    }else{
+      showGoodsList=goodsList;
+    }
 
 
     return Container(
+      width: ScreenUtil().screenWidth,
       padding: EdgeInsets.all(16),
+      margin: EdgeInsets.fromLTRB(getWidth(16), getHeight(8), getWidth(16), getHeight(8)),
       decoration: BoxDecoration(
         color: Colours.white_bg,
         //设置四周圆角 角度
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
         //设置四周边框
-        border: new Border.all(width: 1, color: Colours.blue_bg),
+        border: new Border.all(width: 1, color: Colours.white_bg),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(child: Text("让我说点什么好", style: TextStyle(
                   fontSize: getSp(16), color: Colours.text_dark),)),
               Text(item?.orderState == 0 ? "创作中" : "已完成", style: TextStyle(
                   fontSize: getSp(16),
                   color: item?.orderState == 0 ? Colours.text_gray : Colours
-                      .text_dark),)
+                      .text_dark),textAlign: TextAlign.start,)
             ],
           ), //店铺名称和状态
           Container(
-            margin: EdgeInsets.only(top: getHeight(8)),
+            margin: EdgeInsets.only(top: getHeight(6)),
             child: Text(item?.orderTime ?? "",
               style: TextStyle(fontSize: getSp(14), color: Colours.text_gray),),
           ), //时间
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Expanded(
-              //   child: ListView.builder(
-              //       itemCount: goodsList.length>=4?4:goodsList.length,
-              //       itemBuilder: (context, position) {
-              //         return goodsItem(goodsList[position]);
-              //       }),
-              // ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                   Text("￥${item?.goodsPrice??""}",style: TextStyle(fontSize: getSp(18), color: Colours.text_dark,fontWeight: FontWeight.bold)),
-                  Text("共${item?.goodsNum}件",style: TextStyle(fontSize: getSp(12), color: Colours.text_gray))
-                ],
-              )
-            ],
+          Container(
+            width: ScreenUtil().screenWidth,
+            height: getHeight(80),
+            child:  Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: goodsItem(showGoodsList),
+                  ),
+                ),
+                Container(
+                  child: Text(goodsList.length>4?"...":""),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      verticalDirection: VerticalDirection.down,
+                      children: [
+                        Text("￥",style: TextStyle(fontSize: getSp(12), color: Colours.text_dark)),
+                        Text(item?.goodsPrice??"",style: TextStyle(fontSize: getSp(18), color: Colours.text_dark)),
+                      ],
+                    ),
+                    Text("共${item?.goodsNum}件",style: TextStyle(fontSize: getSp(12), color: Colours.text_gray))
+                  ],
+                )
+              ],
+            ),
           ),//商品和价格、数量
           Container(
+            margin: EdgeInsets.only(top: getHeight(16)),
             padding: EdgeInsets.all(8),
+            width: ScreenUtil().screenWidth,
             decoration: BoxDecoration(
-              color: Colours.text_E5E5E5,
+              color: Colours.gray_line,
               //设置四周圆角 角度
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
               //设置四周边框
-              border: new Border.all(width: 1, color: Colours.blue_bg),
+              border: new Border.all(width: 1, color: Colours.gray_line),
             ),
-            child: Text("订单号：${item?.id}",style: TextStyle(fontSize: getSp(16), color: Colours.text_gray)),
+            child: Text("订单号：${item?.id}",style: TextStyle(fontSize: getSp(16), color: Colours.text_normal)),
           )
         ],
       ),
     );
   }
 
-  Widget goodsItem(GoodsList item){
-    return Container(
-       child: Column(
-         mainAxisAlignment: MainAxisAlignment.start,
-         children: [
-             _imageWrapper(item.goodsImage??""),
-             Container(
-               width: getWidth(50),
-               child: Text(item.goodsName??"",maxLines: 1,
-                 overflow: TextOverflow.ellipsis,style:TextStyle(fontSize: getSp(12), color: Colours.text_normal),),
-             )
+  List<Widget> goodsItem(List<GoodsList> list){
 
-         ],
-       ),
-    );
+
+
+   return list.map((item) {
+      return Container(
+        margin: EdgeInsets.only(right: getWidth(5)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _imageWrapper(item.goodsImage??""),
+            Container(
+              width: getWidth(45),
+              child: Text(item.goodsName??"",maxLines: 1,
+                overflow: TextOverflow.ellipsis,style:TextStyle(fontSize: getSp(12), color: Colours.text_normal),),
+            )
+
+          ],
+        ),
+      );
+    }).toList();
+
+
   }
 
 
   Widget _imageWrapper(String imageUrl) {
+    print("电钢琴图片=========：${imageUrl}");
     return SizedBox(
-      width: getWidth(50),
-      height: getHeight(50),
+      width: getWidth(45),
+      height: getHeight(45),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         placeholder: (context, url) =>
